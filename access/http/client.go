@@ -125,6 +125,10 @@ func (c *Client) GetTransactionResult(ctx context.Context, ID flow.Identifier) (
 	return c.httpClient.GetTransactionResult(ctx, ID)
 }
 
+func (c *Client) GetTransactionResultsByBlockID(ctx context.Context, blockID flow.Identifier) ([]flow.TransactionResult, error) {
+	return c.httpClient.GetTransactionResultsByBlockID(ctx, blockID)
+}
+
 // GetAccount is an alias for GetAccountAtLatestBlock.
 func (c *Client) GetAccount(ctx context.Context, address flow.Address) (*flow.Account, error) {
 	return c.GetAccountAtLatestBlock(ctx, address)

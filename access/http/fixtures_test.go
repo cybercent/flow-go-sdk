@@ -146,10 +146,12 @@ func transactionResultFlowFixture() models.TransactionResult {
 	status := models.SEALED_TransactionStatus
 
 	return models.TransactionResult{
-		BlockId:      txr.BlockID.String(),
-		Status:       &status,
-		StatusCode:   0,
-		ErrorMessage: txr.Error.Error(),
+		BlockId:       txr.BlockID.String(),
+		TransactionId: txr.TransactionID.String(),
+		CollectionId:  txr.CollectionID.String(),
+		Status:        &status,
+		StatusCode:    0,
+		ErrorMessage:  txr.Error.Error(),
 		Events: []models.Event{{
 			Type_:            txr.Events[0].Type,
 			TransactionId:    txr.Events[0].TransactionID.String(),

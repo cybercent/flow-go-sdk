@@ -48,6 +48,7 @@ type handler interface {
 	getEvents(ctx context.Context, eventType string, start string, end string, blockIDs []string, opts ...queryOpts) ([]models.BlockEvents, error)
 	getExecutionResultByID(ctx context.Context, id string, opts ...queryOpts) (*models.ExecutionResult, error)
 	getExecutionResults(ctx context.Context, blockIDs []string, opts ...queryOpts) ([]models.ExecutionResult, error)
+	getTransactionsByBlockID(ctx context.Context, blockID string, opts ...queryOpts) ([]models.Transaction, error)
 }
 
 // ExpandOpts allows you to define a list of fields that you want to retrieve as extra data in the response.
@@ -275,6 +276,27 @@ func (c *BaseClient) GetTransactionResult(
 	}
 
 	return toTransactionResult(tx.Result, c.jsonOptions)
+}
+
+func (c *BaseClient) GetTransactionResultsByBlockID(
+	ctx context.Context,
+	blockID flow.Identifier,
+	opts ...queryOpts,
+) ([]flow.TransactionResult, error) {
+	txs, err := c.handler.getTransactionsByBlockID(ctx, blockID.String(), opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	results := []flow.TransactionResult{}
+	for _, tx := range txs {
+		result, err := toTransactionResult(tx.Result, c.jsonOptions)
+		if err != nil {
+			return []flow.TransactionResult{}, err
+		}
+		results = append(results, *result)
+	}
+	return results, nil
 }
 
 func (c *BaseClient) GetAccountAtBlockHeight(

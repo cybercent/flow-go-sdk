@@ -343,6 +343,14 @@ func (h *httpHandler) getTransaction(
 	return &transaction, nil
 }
 
+func (h *httpHandler) getTransactionsByBlockID(
+	ctx context.Context,
+	blockID string,
+	opts ...queryOpts,
+) ([]models.Transaction, error) {
+	return []models.Transaction{}, errors.New("Unimplemented")
+}
+
 func (h *httpHandler) sendTransaction(ctx context.Context, transaction []byte, opts ...queryOpts) error {
 	var tx models.Transaction
 	return h.post(ctx, h.mustBuildURL("/transactions", opts...), transaction, &tx)

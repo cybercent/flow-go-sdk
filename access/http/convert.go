@@ -365,10 +365,12 @@ func toTransactionResult(txr *models.TransactionResult, options []cadenceJSON.Op
 	}
 
 	return &flow.TransactionResult{
-		Status:  toTransactionStatus(txr.Status),
-		Error:   txErr,
-		Events:  events,
-		BlockID: flow.HexToID(txr.BlockId),
+		Status:        toTransactionStatus(txr.Status),
+		Error:         txErr,
+		Events:        events,
+		BlockID:       flow.HexToID(txr.BlockId),
+		TransactionID: flow.HexToID(txr.TransactionId),
+		CollectionID:  flow.HexToID(txr.CollectionId),
 	}, nil
 }
 
