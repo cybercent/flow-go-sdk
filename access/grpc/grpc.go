@@ -293,6 +293,28 @@ func (c *BaseClient) GetTransactionResult(
 	return &result, nil
 }
 
+func (c *BaseClient) GetTransactionResultsByBlockID(
+	ctx context.Context,
+	blockID flow.Identifier,
+	opts ...grpc.CallOption,
+) ([]flow.TransactionResult, error) {
+	req := &access.GetTransactionsByBlockIDRequest{
+		BlockId: blockID.Bytes(),
+	}
+
+	res, err := c.rpcClient.GetTransactionResultsByBlockID(ctx, req, opts...)
+	if err != nil {
+		return nil, newRPCError(err)
+	}
+
+	results, err := messageToTransactionResults(res, c.jsonOptions)
+	if err != nil {
+		return nil, newMessageToEntityError(entityTransactionResult, err)
+	}
+
+	return results, nil
+}
+
 func (c *BaseClient) GetAccount(ctx context.Context, address flow.Address, opts ...grpc.CallOption) (*flow.Account, error) {
 	return c.GetAccountAtLatestBlock(ctx, address, opts...)
 }

@@ -106,6 +106,10 @@ func (c *Client) GetTransactionResult(ctx context.Context, txID flow.Identifier)
 	return c.grpc.GetTransactionResult(ctx, txID)
 }
 
+func (c *Client) GetTransactionResultsByBlockID(ctx context.Context, blockID flow.Identifier) ([]flow.TransactionResult, error) {
+	return c.grpc.GetTransactionResultsByBlockID(ctx, blockID)
+}
+
 func (c *Client) GetAccount(ctx context.Context, address flow.Address) (*flow.Account, error) {
 	return c.grpc.GetAccount(ctx, address)
 }

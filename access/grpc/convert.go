@@ -530,10 +530,25 @@ func messageToTransactionResult(m *access.TransactionResultResponse, options []j
 	}
 
 	return flow.TransactionResult{
-		Status:      flow.TransactionStatus(m.GetStatus()),
-		Error:       err,
-		Events:      events,
-		BlockID:     flow.BytesToID(m.GetBlockId()),
-		BlockHeight: m.BlockHeight,
+		Status:        flow.TransactionStatus(m.GetStatus()),
+		TransactionID: flow.BytesToID(m.GetTransactionId()),
+		Error:         err,
+		Events:        events,
+		BlockID:       flow.BytesToID(m.GetBlockId()),
+		BlockHeight:   m.BlockHeight,
+		CollectionID:  flow.BytesToID(m.GetCollectionId()),
 	}, nil
+}
+
+func messageToTransactionResults(m *access.TransactionResultsResponse, options []jsoncdc.Option) ([]flow.TransactionResult, error) {
+	results := []flow.TransactionResult{}
+	for _, response := range m.TransactionResults {
+		result, err := messageToTransactionResult(response, options)
+		if err != nil {
+			return []flow.TransactionResult{}, err
+		}
+		results = append(results, result)
+	}
+
+	return results, nil
 }
