@@ -265,6 +265,27 @@ func (c *BaseClient) GetTransaction(
 	return toTransaction(tx)
 }
 
+func (c *BaseClient) GetTransactionsByBlockID(
+	ctx context.Context,
+	blockID flow.Identifier,
+	opts ...queryOpts,
+) ([]flow.Transaction, error) {
+	txs, err := c.handler.getTransactionsByBlockID(ctx, blockID.String(), opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	transactions := []flow.Transaction{}
+	for _, tx := range txs {
+		t, err := toTransaction(&tx)
+		if err != nil {
+			return nil, err
+		}
+		transactions = append(transactions, *t)
+	}
+	return transactions, nil
+}
+
 func (c *BaseClient) GetTransactionResult(
 	ctx context.Context,
 	ID flow.Identifier,

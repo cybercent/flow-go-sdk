@@ -121,6 +121,10 @@ func (c *Client) GetTransaction(ctx context.Context, ID flow.Identifier) (*flow.
 	return c.httpClient.GetTransaction(ctx, ID)
 }
 
+func (c *Client) GetTransactionsByBlockID(ctx context.Context, blockID flow.Identifier) ([]flow.Transaction, error) {
+	return c.httpClient.GetTransactionsByBlockID(ctx, blockID)
+}
+
 func (c *Client) GetTransactionResult(ctx context.Context, ID flow.Identifier) (*flow.TransactionResult, error) {
 	return c.httpClient.GetTransactionResult(ctx, ID)
 }

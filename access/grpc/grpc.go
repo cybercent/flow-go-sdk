@@ -271,6 +271,32 @@ func (c *BaseClient) GetTransaction(
 	return &result, nil
 }
 
+func (c *BaseClient) GetTransactionsByBlockID(
+	ctx context.Context,
+	blockID flow.Identifier,
+	opts ...grpc.CallOption,
+) ([]flow.Transaction, error) {
+	req := &access.GetTransactionsByBlockIDRequest{
+		BlockId: blockID.Bytes(),
+	}
+
+	res, err := c.rpcClient.GetTransactionsByBlockID(ctx, req, opts...)
+	if err != nil {
+		return nil, newRPCError(err)
+	}
+
+	results := []flow.Transaction{}
+	for _, t := range res.GetTransactions() {
+		result, err := messageToTransaction(t)
+		if err != nil {
+			return nil, newMessageToEntityError(entityTransaction, err)
+		}
+		results = append(results, result)
+	}
+
+	return results, nil
+}
+
 func (c *BaseClient) GetTransactionResult(
 	ctx context.Context,
 	txID flow.Identifier,
